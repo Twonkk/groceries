@@ -1,0 +1,10 @@
+data
+node_modules
+npm-debug.log
+.git
+.github
+.gitignore
+README.md
+start-grocery-helper.ps1
+docker-compose*.yml
+unraid-template.xml

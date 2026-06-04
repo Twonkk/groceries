@@ -1,0 +1,12 @@
+{
+  "name": "grocery-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Small shared grocery and household list for a home network.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

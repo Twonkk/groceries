@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>grocery-helper</Name>
+  <Repository>ghcr.io/twonkk/groceries:latest</Repository>
+  <Registry>https://ghcr.io</Registry>
+  <Network>bridge</Network>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview>Small shared grocery and household list for a home network.</Overview>
+  <Category>Productivity: Tools:</Category>
+  <WebUI>http://[IP]:[PORT:4827]/</WebUI>
+  <TemplateURL/>
+  <Icon/>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="WebUI Port" Target="4827" Default="4827" Mode="tcp" Description="Web interface port" Type="Port" Display="always" Required="true" Mask="false">4827</Config>
+  <Config Name="App Data" Target="/app/data" Default="/mnt/user/appdata/grocery-helper" Mode="rw" Description="Persistent grocery list data" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/grocery-helper</Config>
+  <Config Name="Public URL" Target="PUBLIC_URL" Default="http://10.31.10.10:4827" Mode="" Description="URL shown in the QR code. Use your Unraid server IP or local DNS name." Type="Variable" Display="always" Required="true" Mask="false">http://10.31.10.10:4827</Config>
+  <Config Name="Data Dir" Target="DATA_DIR" Default="/app/data" Mode="" Description="Container data folder" Type="Variable" Display="advanced" Required="true" Mask="false">/app/data</Config>
+</Container>

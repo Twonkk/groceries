@@ -1,0 +1,13 @@
+services:
+  grocery-helper:
+    image: ghcr.io/twonkk/groceries:latest
+    container_name: grocery-helper
+    restart: unless-stopped
+    ports:
+      - "4827:4827"
+    environment:
+      PORT: "4827"
+      DATA_DIR: "/app/data"
+      PUBLIC_URL: "http://10.31.10.10:4827"
+    volumes:
+      - /mnt/user/appdata/grocery-helper:/app/data

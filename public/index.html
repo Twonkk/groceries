@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home List</title>
+    <link rel="stylesheet" href="/styles.css?v=2">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Home List</p>
+        <h1>Groceries & Household</h1>
+      </div>
+      <button class="icon-button" id="setupButton" type="button" title="Setup QR" aria-label="Setup QR">
+        <span aria-hidden="true">QR</span>
+      </button>
+    </header>
+
+    <main class="shell">
+      <section class="entry-panel" aria-label="Add item">
+        <form id="itemForm" class="item-form">
+          <label class="field main-field">
+            <span>Item</span>
+            <input id="itemText" name="text" autocomplete="off" placeholder="Milk, trash bags, cereal" required>
+          </label>
+
+          <label class="field short-field">
+            <span>Qty</span>
+            <input id="quantity" name="quantity" autocomplete="off" placeholder="1">
+          </label>
+
+          <label class="field requested-field">
+            <span>Requested by</span>
+            <input id="requestedBy" name="addedBy" autocomplete="name" placeholder="Name" required>
+          </label>
+
+          <label class="field category-field">
+            <span>Category</span>
+            <select id="category" name="category">
+              <option>Groceries</option>
+              <option>Household</option>
+              <option>Personal</option>
+              <option>Other</option>
+            </select>
+          </label>
+
+          <label class="urgent-toggle">
+            <input id="urgent" name="urgent" type="checkbox">
+            <span>Need soon</span>
+          </label>
+
+          <button class="primary-button" type="submit">Add</button>
+        </form>
+
+        <div class="quick-row" aria-label="Quick items">
+          <button type="button" data-quick="Milk">Milk</button>
+          <button type="button" data-quick="Eggs">Eggs</button>
+          <button type="button" data-quick="Bread">Bread</button>
+          <button type="button" data-quick="Paper towels">Paper towels</button>
+          <button type="button" data-quick="Laundry soap">Laundry soap</button>
+          <button type="button" data-quick="Trash bags">Trash bags</button>
+        </div>
+      </section>
+
+      <section class="list-tools" aria-label="List tools">
+        <div class="tabs" role="tablist" aria-label="Filter items">
+          <button class="tab active" type="button" data-filter="needed">Needed</button>
+          <button class="tab" type="button" data-filter="picked">Picked</button>
+          <button class="tab" type="button" data-filter="all">All</button>
+        </div>
+
+        <label class="search-field">
+          <span>Search</span>
+          <input id="search" autocomplete="off" placeholder="Find item">
+        </label>
+      </section>
+
+      <section id="list" class="items" aria-live="polite"></section>
+
+      <section id="setupPanel" class="setup-panel" hidden>
+        <div class="setup-header">
+          <div>
+            <p class="eyebrow">Setup</p>
+            <h2>Scan Link</h2>
+          </div>
+          <button class="ghost-button" id="closeSetup" type="button">Done</button>
+        </div>
+        <div id="qrBox" class="qr-box" aria-label="QR code"></div>
+        <label class="field">
+          <span>Share URL</span>
+          <input id="shareUrl" readonly>
+        </label>
+        <div id="urlChoices" class="url-choices"></div>
+      </section>
+    </main>
+
+    <template id="emptyTemplate">
+      <div class="empty-state">
+        <strong>No items here.</strong>
+        <span>Add something above and it will show up for everyone.</span>
+      </div>
+    </template>
+
+    <script src="/qr.js?v=2"></script>
+    <script src="/app.js?v=2"></script>
+  </body>
+</html>
