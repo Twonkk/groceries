@@ -11,6 +11,7 @@ The app is ready to run on an Unraid server. The important settings are:
 - Host port: `4827`
 - Persistent data path: `/mnt/user/appdata/grocery-helper:/app/data`
 - Public URL: `http://10.31.10.10:4827`
+- App UID/GID: `99:100`
 
 The QR code will use:
 
@@ -109,6 +110,8 @@ Port: 4827 TCP -> 4827
 Path: /app/data -> /mnt/user/appdata/grocery-helper
 Variable: PUBLIC_URL -> http://10.31.10.10:4827
 Variable: DATA_DIR -> /app/data
+Variable: APP_UID -> 99
+Variable: APP_GID -> 100
 ```
 
 An `unraid-template.xml` file is also included if you want to adapt it as a custom template.
@@ -144,3 +147,5 @@ In Docker, the list is saved through the mounted volume:
 ```text
 /mnt/user/appdata/grocery-helper/items.json
 ```
+
+The container defaults to Unraid's usual `nobody:users` IDs, `99:100`, so it can write to appdata mounts.

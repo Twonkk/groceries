@@ -23,4 +23,6 @@
   <Config Name="App Data" Target="/app/data" Default="/mnt/user/appdata/grocery-helper" Mode="rw" Description="Persistent grocery list data" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/grocery-helper</Config>
   <Config Name="Public URL" Target="PUBLIC_URL" Default="http://10.31.10.10:4827" Mode="" Description="URL shown in the QR code. Use your Unraid server IP or local DNS name." Type="Variable" Display="always" Required="true" Mask="false">http://10.31.10.10:4827</Config>
   <Config Name="Data Dir" Target="DATA_DIR" Default="/app/data" Mode="" Description="Container data folder" Type="Variable" Display="advanced" Required="true" Mask="false">/app/data</Config>
+  <Config Name="App UID" Target="APP_UID" Default="99" Mode="" Description="User ID used inside the container. Unraid nobody is usually 99." Type="Variable" Display="advanced" Required="true" Mask="false">99</Config>
+  <Config Name="App GID" Target="APP_GID" Default="100" Mode="" Description="Group ID used inside the container. Unraid users is usually 100." Type="Variable" Display="advanced" Required="true" Mask="false">100</Config>
 </Container>

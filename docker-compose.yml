@@ -9,5 +9,7 @@ services:
       PORT: "4827"
       DATA_DIR: "/app/data"
       PUBLIC_URL: "http://10.31.10.10:4827"
+      APP_UID: "99"
+      APP_GID: "100"
     volumes:
       - /mnt/user/appdata/grocery-helper:/app/data
