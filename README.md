@@ -54,6 +54,29 @@ Settings -> Actions -> General -> Workflow permissions -> Read and write permiss
 
 For easiest Unraid pulls, make the GHCR package public after the first successful publish. If you keep it private, Unraid will need a Docker login/token for `ghcr.io`.
 
+### If Unraid Says `denied`
+
+If Unraid fails with a message like:
+
+```text
+denied: denied
+```
+
+the GitHub repo may be public while the GHCR package is still private. Make the package public:
+
+```text
+GitHub -> profile/packages -> groceries -> Package settings -> Change visibility -> Public
+```
+
+After that, retry the container install in Unraid.
+
+If you prefer to keep the package private, log Unraid into GHCR from an Unraid terminal using a GitHub token with `read:packages`:
+
+```bash
+echo YOUR_GITHUB_TOKEN | docker login ghcr.io -u Twonkk --password-stdin
+docker pull ghcr.io/twonkk/groceries:latest
+```
+
 ### Docker Compose
 
 The included `docker-compose.yml` uses:
