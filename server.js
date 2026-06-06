@@ -237,11 +237,17 @@ async function sendItemAddedAlert(item) {
 
   const subject = `New grocery item: ${item.text}`;
   const text = [
-    `${item.addedBy} requested: ${itemSummary(item)}`,
+    `New item added to the grocery list`,
+    "",
+    `Item: ${item.text}`,
+    item.quantity ? `Quantity: ${item.quantity}` : "",
+    `Category: ${item.category || "Other"}`,
+    `Requested by: ${item.addedBy}`,
+    item.urgent ? "Marked: Need soon" : "",
     PUBLIC_URL ? `List: ${PUBLIC_URL}` : "",
   ].filter(Boolean).join("\n");
 
-  await sendAlerts({ subject, text });
+  await sendAlerts({ subject, text, item });
 }
 
 async function sendDailyDigest() {
@@ -272,11 +278,11 @@ async function sendDailyDigest() {
   await sendAlerts({ subject, text });
 }
 
-async function sendAlerts({ subject, text }) {
+async function sendAlerts({ subject, text, item }) {
   const targets = configuredAlertTargets();
   const jobs = [];
 
-  if (targets.discord) jobs.push(sendDiscordAlert(text));
+  if (targets.discord) jobs.push(sendDiscordAlert({ text, item }));
   if (targets.email) jobs.push(sendResendEmail(subject, text));
   if (!jobs.length) return;
 
@@ -287,12 +293,42 @@ async function sendAlerts({ subject, text }) {
   }
 }
 
-async function sendDiscordAlert(text) {
-  const content = text.length > 1900 ? `${text.slice(0, 1897)}...` : text;
+function discordField(name, value, inline = true) {
+  return { name, value: String(value || "-").slice(0, 1024), inline };
+}
+
+function discordPayload({ text, item }) {
+  if (!item) {
+    return { content: text.length > 1900 ? `${text.slice(0, 1897)}...` : text };
+  }
+
+  const fields = [
+    discordField("Item", item.text, false),
+    item.quantity ? discordField("Quantity", item.quantity) : null,
+    discordField("Category", item.category || "Other"),
+    discordField("Requested by", item.addedBy),
+    item.urgent ? discordField("Need soon", "Yes") : null,
+  ].filter(Boolean);
+
+  if (PUBLIC_URL) fields.push(discordField("Open list", PUBLIC_URL, false));
+
+  return {
+    content: "",
+    embeds: [{
+      title: "New grocery item added",
+      description: `${item.addedBy} added something to the list.`,
+      color: item.urgent ? 0xc45d4d : 0x2f7d4f,
+      fields,
+      timestamp: item.createdAt,
+    }],
+  };
+}
+
+async function sendDiscordAlert({ text, item }) {
   const response = await fetch(DISCORD_WEBHOOK_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content }),
+    body: JSON.stringify(discordPayload({ text, item })),
   });
 
   if (!response.ok) {

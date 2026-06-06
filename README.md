@@ -163,6 +163,8 @@ ALERT_ON_ADD=true
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 
+The app controls the message text and embed layout. The webhook's name and avatar are controlled in Discord's webhook settings.
+
 ### Daily Discord Digest
 
 To get a daily Discord digest around 3 PM Central:
