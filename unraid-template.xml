@@ -25,4 +25,12 @@
   <Config Name="Data Dir" Target="DATA_DIR" Default="/app/data" Mode="" Description="Container data folder" Type="Variable" Display="advanced" Required="true" Mask="false">/app/data</Config>
   <Config Name="App UID" Target="APP_UID" Default="99" Mode="" Description="User ID used inside the container. Unraid nobody is usually 99." Type="Variable" Display="advanced" Required="true" Mask="false">99</Config>
   <Config Name="App GID" Target="APP_GID" Default="100" Mode="" Description="Group ID used inside the container. Unraid users is usually 100." Type="Variable" Display="advanced" Required="true" Mask="false">100</Config>
+  <Config Name="Alert On Add" Target="ALERT_ON_ADD" Default="false" Mode="" Description="Send an alert when someone adds an item. Set true to enable." Type="Variable" Display="always" Required="false" Mask="false">false</Config>
+  <Config Name="Daily Alert Enabled" Target="ALERT_DAILY_ENABLED" Default="false" Mode="" Description="Send one daily digest alert." Type="Variable" Display="always" Required="false" Mask="false">false</Config>
+  <Config Name="Daily Alert Time" Target="ALERT_DAILY_TIME" Default="15:00" Mode="" Description="Daily alert time in 24-hour HH:mm format." Type="Variable" Display="always" Required="false" Mask="false">15:00</Config>
+  <Config Name="Alert Time Zone" Target="ALERT_TIME_ZONE" Default="America/Chicago" Mode="" Description="Time zone for daily alerts." Type="Variable" Display="always" Required="false" Mask="false">America/Chicago</Config>
+  <Config Name="Discord Webhook URL" Target="DISCORD_WEBHOOK_URL" Default="" Mode="" Description="Discord webhook URL for alerts." Type="Variable" Display="always" Required="false" Mask="true"></Config>
+  <Config Name="Resend API Key" Target="RESEND_API_KEY" Default="" Mode="" Description="Resend API key for email alerts." Type="Variable" Display="advanced" Required="false" Mask="true"></Config>
+  <Config Name="Alert Email To" Target="ALERT_EMAIL_TO" Default="" Mode="" Description="Comma-separated email recipients for Resend alerts." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="Alert Email From" Target="ALERT_EMAIL_FROM" Default="" Mode="" Description="Verified Resend sender address, such as Groceries &lt;alerts@example.com&gt;." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
 </Container>

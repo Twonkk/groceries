@@ -149,3 +149,44 @@ In Docker, the list is saved through the mounted volume:
 ```
 
 The container defaults to Unraid's usual `nobody:users` IDs, `99:100`, so it can write to appdata mounts.
+
+## Alerts
+
+Alerts are configured with container environment variables.
+
+### Discord Item Alerts
+
+To get a Discord message whenever someone adds an item:
+
+```text
+ALERT_ON_ADD=true
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
+```
+
+### Daily Discord Digest
+
+To get a daily Discord digest around 3 PM Central:
+
+```text
+ALERT_DAILY_ENABLED=true
+ALERT_DAILY_TIME=15:00
+ALERT_TIME_ZONE=America/Chicago
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
+```
+
+### Daily Resend Email Digest
+
+To get a daily email digest through Resend:
+
+```text
+ALERT_DAILY_ENABLED=true
+ALERT_DAILY_TIME=15:00
+ALERT_TIME_ZONE=America/Chicago
+RESEND_API_KEY=re_...
+ALERT_EMAIL_TO=you@example.com
+ALERT_EMAIL_FROM=Groceries <alerts@yourdomain.com>
+```
+
+`ALERT_EMAIL_FROM` must be a sender/domain verified in Resend.
+
+You can enable both Discord and Resend at the same time by setting both the Discord webhook and Resend email variables.

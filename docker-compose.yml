@@ -11,5 +11,13 @@ services:
       PUBLIC_URL: "http://10.31.10.10:4827"
       APP_UID: "99"
       APP_GID: "100"
+      ALERT_ON_ADD: "false"
+      ALERT_DAILY_ENABLED: "false"
+      ALERT_DAILY_TIME: "15:00"
+      ALERT_TIME_ZONE: "America/Chicago"
+      DISCORD_WEBHOOK_URL: ""
+      RESEND_API_KEY: ""
+      ALERT_EMAIL_TO: ""
+      ALERT_EMAIL_FROM: ""
     volumes:
       - /mnt/user/appdata/grocery-helper:/app/data
