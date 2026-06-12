@@ -1,6 +1,7 @@
 const form = document.querySelector("#itemForm");
 const list = document.querySelector("#list");
 const itemText = document.querySelector("#itemText");
+const brand = document.querySelector("#brand");
 const quantity = document.querySelector("#quantity");
 const requestedBy = document.querySelector("#requestedBy");
 const category = document.querySelector("#category");
@@ -56,7 +57,7 @@ function visibleItems() {
   const query = state.query.toLowerCase();
   return state.items
     .filter((item) => state.filter === "all" || item.status === state.filter)
-    .filter((item) => !query || `${item.text} ${item.category} ${item.quantity} ${item.addedBy}`.toLowerCase().includes(query))
+    .filter((item) => !query || `${item.text} ${item.brand || ""} ${item.category} ${item.quantity} ${item.addedBy}`.toLowerCase().includes(query))
     .sort((a, b) => {
       if (a.status !== b.status) return a.status === "needed" ? -1 : 1;
       if (a.urgent !== b.urgent) return a.urgent ? -1 : 1;
@@ -102,6 +103,7 @@ function renderItem(item) {
       <div class="item-body">
         <div class="item-main">
           <strong>${escapeHtml(item.text)}</strong>
+          ${item.brand ? `<span class="brand">${escapeHtml(item.brand)}</span>` : ""}
           ${item.quantity ? `<span class="quantity">${escapeHtml(item.quantity)}</span>` : ""}
           ${item.urgent ? `<span class="need-soon">Soon</span>` : ""}
         </div>
@@ -159,6 +161,7 @@ form.addEventListener("submit", async (event) => {
       method: "POST",
       body: JSON.stringify({
         text,
+        brand: brand.value,
         quantity: quantity.value,
         addedBy,
         category: category.value,

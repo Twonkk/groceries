@@ -155,6 +155,7 @@ async function handleApi(req, res, url) {
     const item = {
       id: crypto.randomUUID(),
       text,
+      brand: cleanText(body.brand, 60),
       quantity: cleanText(body.quantity, 32),
       category: cleanText(body.category, 40) || "Groceries",
       addedBy,
@@ -179,6 +180,7 @@ async function handleApi(req, res, url) {
     if (!item) return sendJson(res, 404, { error: "Item not found." });
 
     if (body.text !== undefined) item.text = cleanText(body.text);
+    if (body.brand !== undefined) item.brand = cleanText(body.brand, 60);
     if (body.quantity !== undefined) item.quantity = cleanText(body.quantity, 32);
     if (body.category !== undefined) item.category = cleanText(body.category, 40) || "Groceries";
     if (body.addedBy !== undefined) {
@@ -224,6 +226,7 @@ function configuredAlertTargets() {
 
 function itemSummary(item) {
   const parts = [item.text];
+  if (item.brand) parts.push(`brand: ${item.brand}`);
   if (item.quantity) parts.push(`qty: ${item.quantity}`);
   if (item.category) parts.push(item.category);
   if (item.urgent) parts.push("need soon");
@@ -240,6 +243,7 @@ async function sendItemAddedAlert(item) {
     `New item added to the grocery list`,
     "",
     `Item: ${item.text}`,
+    item.brand ? `Brand: ${item.brand}` : "",
     item.quantity ? `Quantity: ${item.quantity}` : "",
     `Category: ${item.category || "Other"}`,
     `Requested by: ${item.addedBy}`,
@@ -304,6 +308,7 @@ function discordPayload({ text, item }) {
 
   const fields = [
     discordField("Item", item.text, false),
+    item.brand ? discordField("Brand", item.brand) : null,
     item.quantity ? discordField("Quantity", item.quantity) : null,
     discordField("Category", item.category || "Other"),
     discordField("Requested by", item.addedBy),

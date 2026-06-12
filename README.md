@@ -2,6 +2,8 @@
 
 A small shared grocery and household list for your home network.
 
+Items can include an optional brand name, quantity, category, requester, and need-soon flag.
+
 ## Unraid / Docker
 
 The app is ready to run on an Unraid server. The important settings are:
