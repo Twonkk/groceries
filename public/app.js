@@ -81,11 +81,21 @@ function timeLabel(value) {
   return new Intl.DateTimeFormat([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(date);
 }
 
+function requesterKey(value) {
+  return String(value || "Unknown").trim().toLowerCase();
+}
+
+function preferredRequesterName(current, next) {
+  if (!current) return next;
+  if (current === current.toLowerCase() && next !== next.toLowerCase()) return next;
+  return current;
+}
+
 function visibleItems() {
   const query = state.query.toLowerCase();
   return state.items
     .filter((item) => state.filter === "all" || item.status === state.filter)
-    .filter((item) => !state.requester || item.addedBy === state.requester)
+    .filter((item) => !state.requester || requesterKey(item.addedBy) === state.requester)
     .filter((item) => !query || `${item.text} ${item.brand || ""} ${item.category} ${item.quantity} ${item.addedBy}`.toLowerCase().includes(query))
     .sort((a, b) => {
       if (a.status !== b.status) return a.status === "needed" ? -1 : 1;
@@ -150,20 +160,23 @@ function renderItem(item) {
 
 function renderRequesterFilters() {
   const neededItems = state.items.filter((item) => item.status === "needed");
-  const counts = neededItems.reduce((result, item) => {
+  const requesters = neededItems.reduce((result, item) => {
     const name = item.addedBy || "Unknown";
-    result[name] = (result[name] || 0) + 1;
+    const key = requesterKey(name);
+    result[key] = result[key] || { name: "", count: 0 };
+    result[key].name = preferredRequesterName(result[key].name, name);
+    result[key].count += 1;
     return result;
   }, {});
-  const names = Object.keys(counts).sort((a, b) => a.localeCompare(b));
+  const entries = Object.entries(requesters).sort(([, a], [, b]) => a.name.localeCompare(b.name));
 
-  if (state.requester && !counts[state.requester]) state.requester = "";
-  userFilter.hidden = names.length === 0;
+  if (state.requester && !requesters[state.requester]) state.requester = "";
+  userFilter.hidden = entries.length === 0;
   requesterFilters.innerHTML = [
     `<button type="button" class="${state.requester === "" ? "active" : ""}" data-requester="">Everyone <span>${neededItems.length}</span></button>`,
-    ...names.map((name) => `
-      <button type="button" class="${state.requester === name ? "active" : ""}" data-requester="${escapeHtml(name)}">
-        ${escapeHtml(name)} <span>${counts[name]}</span>
+    ...entries.map(([key, requester]) => `
+      <button type="button" class="${state.requester === key ? "active" : ""}" data-requester="${escapeHtml(key)}">
+        ${escapeHtml(requester.name)} <span>${requester.count}</span>
       </button>
     `),
   ].join("");
