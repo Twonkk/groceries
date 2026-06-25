@@ -168,6 +168,7 @@ select:focus {
   color: #fff;
   background: var(--green);
   border-color: var(--green);
+  grid-column: -2 / -1;
 }
 
 .primary-button:disabled {
@@ -277,6 +278,30 @@ select:focus {
   background: var(--gold);
 }
 
+.swatch.cyan {
+  background: #319795;
+}
+
+.swatch.brown {
+  background: #8a684a;
+}
+
+.swatch.teal {
+  background: #087f5b;
+}
+
+.swatch.gray {
+  background: #6b7280;
+}
+
+.swatch.rose {
+  background: #b54868;
+}
+
+.swatch.ink {
+  background: var(--ink);
+}
+
 .item {
   display: grid;
   grid-template-columns: 2.75rem minmax(0, 1fr) 2.5rem;
@@ -366,6 +391,129 @@ select:focus {
   font-size: 0.82rem;
 }
 
+.photo-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  padding: 0.65rem;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.86rem;
+}
+
+.photo-preview[hidden] {
+  display: none;
+}
+
+.photo-preview img {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.photo-thumb {
+  display: inline-flex;
+  align-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-top: 0.55rem;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-filter {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+
+.user-filter[hidden] {
+  display: none;
+}
+
+.user-filter > span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chips button {
+  min-height: 2.35rem;
+  padding: 0 0.75rem;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.filter-chips button.active {
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+.filter-chips span {
+  opacity: 0.8;
+}
+
+.photo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(32, 33, 31, 0.78);
+}
+
+.photo-modal[hidden] {
+  display: none;
+}
+
+.photo-modal img {
+  max-width: min(92vw, 56rem);
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.photo-close {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #fff;
+  background: var(--coral);
+  border: 0;
+  border-radius: 8px;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
 .empty-state {
   display: grid;
   gap: 0.25rem;
@@ -436,6 +584,7 @@ select:focus {
   }
 
   .main-field,
+  .photo-field,
   .requested-field,
   .category-field,
   .urgent-toggle,

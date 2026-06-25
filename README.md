@@ -2,7 +2,8 @@
 
 A small shared grocery and household list for your home network.
 
-Items can include an optional brand name, quantity, category, requester, and need-soon flag.
+Items can include an optional photo, brand name, quantity, category, requester, and need-soon flag.
+The app can filter needed items by requester and groups the list by grocery category.
 
 ## Unraid / Docker
 
@@ -151,6 +152,8 @@ In Docker, the list is saved through the mounted volume:
 ```
 
 The container defaults to Unraid's usual `nobody:users` IDs, `99:100`, so it can write to appdata mounts.
+
+Photos are compressed in the browser and stored with the item data in `items.json`.
 
 ## Alerts
 

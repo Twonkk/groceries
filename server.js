@@ -19,6 +19,7 @@ const RESEND_API_KEY = String(process.env.RESEND_API_KEY || "").trim();
 const ALERT_EMAIL_TO = String(process.env.ALERT_EMAIL_TO || "").trim();
 const ALERT_EMAIL_FROM = String(process.env.ALERT_EMAIL_FROM || "").trim();
 const ALERT_EMAIL_SUBJECT = cleanText(process.env.ALERT_EMAIL_SUBJECT || "Grocery list digest", 120);
+const MAX_PHOTO_BYTES = 1_500_000;
 
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -67,6 +68,14 @@ function sendJson(res, status, data) {
 
 function cleanText(value, max = 120) {
   return String(value || "").trim().replace(/\s+/g, " ").slice(0, max);
+}
+
+function cleanPhoto(value) {
+  const photo = String(value || "");
+  if (!photo) return "";
+  if (photo.length > MAX_PHOTO_BYTES) return "";
+  if (!/^data:image\/(jpeg|jpg|png|webp);base64,[a-z0-9+/=]+$/i.test(photo)) return "";
+  return photo;
 }
 
 function parseBool(value, fallback = false) {
@@ -120,7 +129,7 @@ async function parseBody(req) {
   const chunks = [];
   for await (const chunk of req) {
     chunks.push(chunk);
-    if (Buffer.concat(chunks).length > 128 * 1024) {
+    if (Buffer.concat(chunks).length > 2 * 1024 * 1024) {
       throw new Error("Request body too large");
     }
   }
@@ -157,9 +166,10 @@ async function handleApi(req, res, url) {
       text,
       brand: cleanText(body.brand, 60),
       quantity: cleanText(body.quantity, 32),
-      category: cleanText(body.category, 40) || "Groceries",
+      category: cleanText(body.category, 40) || "Pantry",
       addedBy,
       note: cleanText(body.note, 160),
+      photo: cleanPhoto(body.photo),
       urgent: Boolean(body.urgent),
       status: "needed",
       createdAt: now,
@@ -182,13 +192,14 @@ async function handleApi(req, res, url) {
     if (body.text !== undefined) item.text = cleanText(body.text);
     if (body.brand !== undefined) item.brand = cleanText(body.brand, 60);
     if (body.quantity !== undefined) item.quantity = cleanText(body.quantity, 32);
-    if (body.category !== undefined) item.category = cleanText(body.category, 40) || "Groceries";
+    if (body.category !== undefined) item.category = cleanText(body.category, 40) || "Pantry";
     if (body.addedBy !== undefined) {
       const addedBy = cleanText(body.addedBy, 40);
       if (!addedBy) return sendJson(res, 400, { error: "Requested by is required." });
       item.addedBy = addedBy;
     }
     if (body.note !== undefined) item.note = cleanText(body.note, 160);
+    if (body.photo !== undefined) item.photo = cleanPhoto(body.photo);
     if (body.urgent !== undefined) item.urgent = Boolean(body.urgent);
     if (body.status === "needed" || body.status === "picked") item.status = body.status;
     item.updatedAt = new Date().toISOString();
@@ -229,6 +240,7 @@ function itemSummary(item) {
   if (item.brand) parts.push(`brand: ${item.brand}`);
   if (item.quantity) parts.push(`qty: ${item.quantity}`);
   if (item.category) parts.push(item.category);
+  if (item.photo) parts.push("photo attached");
   if (item.urgent) parts.push("need soon");
   return parts.join(" | ");
 }
@@ -247,6 +259,7 @@ async function sendItemAddedAlert(item) {
     item.quantity ? `Quantity: ${item.quantity}` : "",
     `Category: ${item.category || "Other"}`,
     `Requested by: ${item.addedBy}`,
+    item.photo ? "Photo: attached in the list" : "",
     item.urgent ? "Marked: Need soon" : "",
     PUBLIC_URL ? `List: ${PUBLIC_URL}` : "",
   ].filter(Boolean).join("\n");
@@ -312,6 +325,7 @@ function discordPayload({ text, item }) {
     item.quantity ? discordField("Quantity", item.quantity) : null,
     discordField("Category", item.category || "Other"),
     discordField("Requested by", item.addedBy),
+    item.photo ? discordField("Photo", "Attached in the list") : null,
     item.urgent ? discordField("Need soon", "Yes") : null,
   ].filter(Boolean);
 
